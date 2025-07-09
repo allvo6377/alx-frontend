@@ -188,6 +188,15 @@ class WC_Mpesa_Gateway extends WC_Payment_Gateway {
      * Process payment
      */
     public function process_payment($order_id) {
+        // Check if API keys are configured before processing
+        if (!$this->are_keys_set()) {
+            wc_add_notice(__('M-Pesa payment method is not properly configured. Please contact the store administrator.', 'wp-mpesa-gateway'), 'error');
+            return array(
+                'result' => 'failure',
+                'redirect' => ''
+            );
+        }
+        
         $order = wc_get_order($order_id);
         $phone = sanitize_text_field($_POST['mpesa_phone_number']);
         $amount = $order->get_total();
@@ -317,9 +326,7 @@ class WC_Mpesa_Gateway extends WC_Payment_Gateway {
      */
     public function is_available() {
         if ('yes' === $this->enabled) {
-            if (!$this->are_keys_set()) {
-                return false;
-            }
+            // Allow gateway to be available even without keys for initial setup
             return true;
         }
         return false;
