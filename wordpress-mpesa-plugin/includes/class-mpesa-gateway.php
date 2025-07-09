@@ -362,5 +362,14 @@ class WC_Mpesa_Gateway extends WC_Payment_Gateway {
         echo '<code>' . home_url('/wp-admin/admin-ajax.php?action=mpesa_callback') . '</code>';
         echo '<p><small>' . __('This URL should be configured in your M-Pesa application settings.', 'wp-mpesa-gateway') . '</small></p>';
         echo '</div>';
+        
+        // Test connection section
+        echo '<div class="mpesa-test-connection">';
+        echo '<h3>' . __('Test API Connection', 'wp-mpesa-gateway') . '</h3>';
+        echo '<p>' . __('Test your M-Pesa API credentials to ensure they are working correctly.', 'wp-mpesa-gateway') . '</p>';
+        echo '<button type="button" id="test-mpesa-connection" class="button button-secondary">' . __('Test Connection', 'wp-mpesa-gateway') . '</button>';
+        echo '<div id="test-connection-result" style="margin-top: 15px;"></div>';
+        echo '<input type="hidden" id="mpesa_admin_nonce" value="' . wp_create_nonce('mpesa_test_connection') . '" />';
+        echo '</div>';
     }
 }

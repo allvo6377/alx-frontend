@@ -45,7 +45,9 @@ class WP_Mpesa_API {
         $consumer_secret = $this->is_sandbox ? $this->settings['sandbox_consumer_secret'] : $this->settings['consumer_secret'];
         
         if (empty($consumer_key) || empty($consumer_secret)) {
-            WP_Mpesa_Logger::log('Missing consumer key or secret');
+            $error_msg = 'Missing consumer key or secret for ' . ($this->is_sandbox ? 'sandbox' : 'production') . ' environment';
+            WP_Mpesa_Logger::log($error_msg);
+            error_log('M-Pesa API Error: ' . $error_msg);
             return false;
         }
         
@@ -53,29 +55,63 @@ class WP_Mpesa_API {
         
         $url = $this->get_base_url() . '/oauth/v1/generate?grant_type=client_credentials';
         
+        WP_Mpesa_Logger::log('Attempting to get access token from: ' . $url);
+        
         $response = wp_remote_get($url, array(
             'headers' => array(
                 'Authorization' => 'Basic ' . $credentials,
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
+                'Cache-Control' => 'no-cache'
             ),
-            'timeout' => 30
+            'timeout' => 30,
+            'sslverify' => true
         ));
         
         if (is_wp_error($response)) {
-            WP_Mpesa_Logger::log('Token request failed: ' . $response->get_error_message());
+            $error_msg = 'Token request failed: ' . $response->get_error_message();
+            WP_Mpesa_Logger::log($error_msg);
+            error_log('M-Pesa API Error: ' . $error_msg);
             return false;
         }
         
+        $response_code = wp_remote_retrieve_response_code($response);
         $body = wp_remote_retrieve_body($response);
+        
+        WP_Mpesa_Logger::log('API Response Code: ' . $response_code);
+        WP_Mpesa_Logger::log('API Response Body: ' . $body);
+        
+        if ($response_code !== 200) {
+            $error_msg = 'API returned status code: ' . $response_code . ', Body: ' . $body;
+            WP_Mpesa_Logger::log($error_msg);
+            error_log('M-Pesa API Error: ' . $error_msg);
+            return false;
+        }
+        
         $data = json_decode($body, true);
         
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $error_msg = 'Invalid JSON response: ' . json_last_error_msg();
+            WP_Mpesa_Logger::log($error_msg);
+            error_log('M-Pesa API Error: ' . $error_msg);
+            return false;
+        }
+        
         if (isset($data['access_token'])) {
+            WP_Mpesa_Logger::log('Access token obtained successfully');
             // Cache token for 55 minutes (tokens expire in 1 hour)
             set_transient('mpesa_access_token', $data['access_token'], 55 * MINUTE_IN_SECONDS);
             return $data['access_token'];
         }
         
-        WP_Mpesa_Logger::log('Failed to get access token: ' . $body);
+        // Handle specific error responses
+        if (isset($data['errorCode'])) {
+            $error_msg = 'API Error ' . $data['errorCode'] . ': ' . (isset($data['errorMessage']) ? $data['errorMessage'] : 'Unknown error');
+        } else {
+            $error_msg = 'Failed to get access token. Response: ' . $body;
+        }
+        
+        WP_Mpesa_Logger::log($error_msg);
+        error_log('M-Pesa API Error: ' . $error_msg);
         return false;
     }
     

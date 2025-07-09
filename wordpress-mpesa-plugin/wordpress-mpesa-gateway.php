@@ -87,6 +87,8 @@ class WP_Mpesa_Gateway_Plugin {
         add_action('wp_ajax_mpesa_callback', array($this, 'handle_callback'));
         add_action('wp_ajax_nopriv_mpesa_callback', array($this, 'handle_callback'));
         
+        // Add admin AJAX handlers - will be handled by the admin class instance
+        
         // Enqueue scripts
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));

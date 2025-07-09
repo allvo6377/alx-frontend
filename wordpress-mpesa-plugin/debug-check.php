@@ -179,10 +179,78 @@ if (class_exists('WC_Mpesa_Gateway')) {
 
 echo "</div>";
 
-echo "<h2>9. Next Steps</h2>";
+// Test API Connection if credentials are available
+if (class_exists('WC_Mpesa_Gateway')) {
+    echo "<h2>9. API Connection Test</h2>";
+    $gateways = WC()->payment_gateways()->payment_gateways();
+    if (isset($gateways['mpesa'])) {
+        $gateway = $gateways['mpesa'];
+        $sandbox_mode = $gateway->get_option('sandbox_mode');
+        
+        if ($sandbox_mode === 'yes') {
+            $consumer_key = $gateway->get_option('sandbox_consumer_key');
+            $consumer_secret = $gateway->get_option('sandbox_consumer_secret');
+            $api_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+        } else {
+            $consumer_key = $gateway->get_option('consumer_key');
+            $consumer_secret = $gateway->get_option('consumer_secret');
+            $api_url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+        }
+        
+        if (!empty($consumer_key) && !empty($consumer_secret)) {
+            echo "<p>Testing API connection...</p>";
+            
+            $credentials = base64_encode($consumer_key . ':' . $consumer_secret);
+            
+            $response = wp_remote_get($api_url, array(
+                'headers' => array(
+                    'Authorization' => 'Basic ' . $credentials,
+                    'Content-Type' => 'application/json'
+                ),
+                'timeout' => 30
+            ));
+            
+            if (is_wp_error($response)) {
+                echo "<p class='error'>✗ API Connection Failed: " . $response->get_error_message() . "</p>";
+                echo "<p class='info'>This indicates a network or server configuration issue.</p>";
+            } else {
+                $response_code = wp_remote_retrieve_response_code($response);
+                $body = wp_remote_retrieve_body($response);
+                
+                if ($response_code === 200) {
+                    $data = json_decode($body, true);
+                    if (isset($data['access_token'])) {
+                        echo "<p class='success'>✓ API Connection Successful</p>";
+                        echo "<p><strong>Token Preview:</strong> " . substr($data['access_token'], 0, 20) . "...</p>";
+                    } else {
+                        echo "<p class='error'>✗ Invalid API Response</p>";
+                        echo "<p><strong>Response:</strong> " . htmlspecialchars($body) . "</p>";
+                    }
+                } else {
+                    echo "<p class='error'>✗ API Error (Status: {$response_code})</p>";
+                    echo "<p><strong>Response:</strong> " . htmlspecialchars($body) . "</p>";
+                    
+                    // Provide specific error guidance
+                    if ($response_code === 401) {
+                        echo "<p class='info'>Status 401 means invalid credentials. Check your Consumer Key and Secret.</p>";
+                    } elseif ($response_code === 403) {
+                        echo "<p class='info'>Status 403 means access denied. Your app might not be approved.</p>";
+                    } elseif ($response_code === 400) {
+                        echo "<p class='info'>Status 400 means bad request. Check your app configuration.</p>";
+                    }
+                }
+            }
+        } else {
+            echo "<p class='warning'>⚠ Cannot test API - credentials not configured</p>";
+        }
+    }
+}
+
+echo "<h2>10. Next Steps</h2>";
 echo "<ol>";
 echo "<li>Fix any issues marked with ✗ or ⚠</li>";
 echo "<li>Configure your M-Pesa API credentials</li>";
+echo "<li>Test API connection until successful</li>";
 echo "<li>Test with a small transaction</li>";
 echo "<li>Delete this debug file for security</li>";
 echo "</ol>";

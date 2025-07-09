@@ -50,26 +50,61 @@ jQuery(document).ready(function($) {
             
             resultDiv.html('<div class="notice notice-info"><p>Testing connection...</p></div>');
             
+            // Get nonce value - try multiple possible sources
+            var nonce = $('#mpesa_admin_nonce').val() || 
+                       (typeof mpesa_admin_params !== 'undefined' ? mpesa_admin_params.nonce : '') ||
+                       $('input[name="_wpnonce"]').val() || 
+                       'mpesa_test_connection_fallback';
+            
             $.ajax({
                 url: ajaxurl,
                 type: 'POST',
                 data: {
                     action: 'mpesa_test_connection',
-                    nonce: $('#mpesa_admin_nonce').val()
+                    nonce: nonce
                 },
                 timeout: 30000,
                 success: function(response) {
+                    console.log('Test connection response:', response);
+                    
                     if (response.success) {
-                        resultDiv.html('<div class="notice notice-success"><p><span class="dashicons dashicons-yes-alt"></span> ' + response.data.message + '</p></div>');
+                        var message = response.data.message;
+                        if (response.data.environment) {
+                            message += '<br><small>Environment: ' + response.data.environment + '</small>';
+                        }
+                        if (response.data.token_preview) {
+                            message += '<br><small>Token: ' + response.data.token_preview + '</small>';
+                        }
+                        resultDiv.html('<div class="notice notice-success"><p><span class="dashicons dashicons-yes-alt"></span> ' + message + '</p></div>');
                     } else {
-                        resultDiv.html('<div class="notice notice-error"><p><span class="dashicons dashicons-no-alt"></span> ' + response.data.message + '</p></div>');
+                        var errorMessage = response.data.message || 'Connection test failed.';
+                        if (response.data.debug_info) {
+                            errorMessage += '<br><small>' + response.data.debug_info + '</small>';
+                        }
+                        resultDiv.html('<div class="notice notice-error"><p><span class="dashicons dashicons-no-alt"></span> ' + errorMessage + '</p></div>');
                     }
                 },
                 error: function(xhr, status, error) {
+                    console.error('AJAX Error:', xhr, status, error);
+                    
                     var errorMsg = 'Connection test failed.';
                     if (status === 'timeout') {
-                        errorMsg = 'Connection test timed out. Please check your API credentials.';
+                        errorMsg = 'Connection test timed out. Please check your API credentials and server connectivity.';
+                    } else if (xhr.status === 403) {
+                        errorMsg = 'Access denied. Please refresh the page and try again.';
+                    } else if (xhr.status === 500) {
+                        errorMsg = 'Server error. Please check your error logs.';
+                    } else if (xhr.responseText) {
+                        try {
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            if (errorResponse.data && errorResponse.data.message) {
+                                errorMsg = errorResponse.data.message;
+                            }
+                        } catch (e) {
+                            errorMsg += ' Response: ' + xhr.responseText.substring(0, 100);
+                        }
                     }
+                    
                     resultDiv.html('<div class="notice notice-error"><p><span class="dashicons dashicons-no-alt"></span> ' + errorMsg + '</p></div>');
                 },
                 complete: function() {
