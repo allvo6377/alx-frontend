@@ -1,0 +1,27 @@
+<svg width="100" height="40" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mpesaGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00a651;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#008a42;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100" height="40" rx="6" fill="url(#mpesaGradient)"/>
+  
+  <!-- M-Pesa Text -->
+  <text x="50" y="28" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">M-PESA</text>
+  
+  <!-- Mobile phone icon -->
+  <g transform="translate(8, 8)">
+    <rect x="0" y="0" width="12" height="20" rx="2" fill="none" stroke="white" stroke-width="1.5"/>
+    <rect x="2" y="3" width="8" height="12" fill="white" opacity="0.8"/>
+    <circle cx="6" cy="17" r="1" fill="white"/>
+  </g>
+  
+  <!-- Money symbol -->
+  <g transform="translate(80, 12)">
+    <circle cx="6" cy="6" r="6" fill="none" stroke="white" stroke-width="1.5"/>
+    <text x="6" y="10" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="8" font-weight="bold">$</text>
+  </g>
+</svg>
