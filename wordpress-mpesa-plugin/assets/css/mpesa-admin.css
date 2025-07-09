@@ -1,0 +1,463 @@
+/* M-Pesa Admin Styles */
+
+.mpesa-admin-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Admin content layout */
+.mpesa-admin-content {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.mpesa-main-settings {
+    flex: 2;
+}
+
+.mpesa-sidebar {
+    flex: 1;
+}
+
+/* Postbox styling */
+.postbox {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    margin-bottom: 20px;
+}
+
+.postbox .hndle {
+    background: #f1f1f1;
+    border-bottom: 1px solid #ccd0d4;
+    padding: 12px 16px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.postbox .inside {
+    padding: 16px;
+}
+
+/* Status items */
+.status-items {
+    margin: 0;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-item span:first-child {
+    font-weight: 500;
+    color: #23282d;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.success {
+    background: #46b450;
+    color: white;
+}
+
+.status-badge.error {
+    background: #dc3232;
+    color: white;
+}
+
+.status-badge.warning {
+    background: #ffb900;
+    color: white;
+}
+
+/* Setup steps */
+.setup-step {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.setup-step:hover {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.setup-step h4 {
+    margin: 0 0 10px 0;
+    color: #23282d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.setup-step p {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.setup-step.completed {
+    background: #f0f8f0;
+    border-color: #46b450;
+}
+
+.setup-step.completed h4 {
+    color: #46b450;
+}
+
+/* Test connection section */
+#test-connection-result {
+    margin-top: 15px;
+}
+
+#test-connection-result .notice {
+    margin: 0;
+    padding: 12px 16px;
+}
+
+#test-connection-result .dashicons {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Webhook info */
+.mpesa-webhook-info {
+    background: #f0f8ff;
+    border: 1px solid #0073aa;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.mpesa-webhook-info h3 {
+    color: #0073aa;
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.mpesa-webhook-info p {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    color: #333;
+}
+
+.mpesa-webhook-info code {
+    background: #fff;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: block;
+    margin: 10px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    word-break: break-all;
+    color: #d63384;
+}
+
+.copy-webhook-url {
+    margin-left: 10px;
+    padding: 2px 8px;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+/* Transaction summary cards */
+.mpesa-transactions-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    background: white;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.summary-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #00a651;
+}
+
+.summary-card p {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Transaction table improvements */
+.wp-list-table .status-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+}
+
+.wp-list-table .status-badge.pending {
+    background: #ffb900;
+    color: white;
+}
+
+.wp-list-table .status-badge.completed {
+    background: #46b450;
+    color: white;
+}
+
+.wp-list-table .status-badge.failed {
+    background: #dc3232;
+    color: white;
+}
+
+/* Modal styling */
+.mpesa-modal {
+    display: none;
+    position: fixed;
+    z-index: 999999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.mpesa-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: none;
+    border-radius: 6px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.mpesa-modal-loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+/* Loading animation for buttons */
+.button.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.button.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: mpesa-spin 1s ease infinite;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@keyframes mpesa-spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Form improvements */
+.field-feedback {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* Documentation links */
+.mpesa-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mpesa-sidebar li {
+    margin-bottom: 10px;
+}
+
+.mpesa-sidebar a {
+    color: #0073aa;
+    text-decoration: none;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.mpesa-sidebar a:hover {
+    color: #005177;
+}
+
+.mpesa-sidebar a::before {
+    content: '\f504';
+    font-family: dashicons;
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* Settings validation */
+.woocommerce-save-button {
+    background: #00a651 !important;
+    border-color: #00a651 !important;
+}
+
+.woocommerce-save-button:hover {
+    background: #008a42 !important;
+    border-color: #008a42 !important;
+}
+
+/* Error states */
+.form-invalid {
+    border-color: #dc3232 !important;
+    box-shadow: 0 0 2px rgba(220, 50, 50, 0.8);
+}
+
+/* Success states */
+.form-valid {
+    border-color: #46b450 !important;
+    box-shadow: 0 0 2px rgba(70, 180, 80, 0.8);
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .mpesa-admin-content {
+        flex-direction: column;
+    }
+    
+    .mpesa-main-settings,
+    .mpesa-sidebar {
+        flex: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .mpesa-transactions-summary {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-card {
+        margin-bottom: 15px;
+    }
+    
+    .mpesa-modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 15px;
+    }
+    
+    .status-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .mpesa-sidebar,
+    .button,
+    .notice {
+        display: none;
+    }
+    
+    .mpesa-main-settings {
+        width: 100%;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .setup-step {
+        border: 2px solid;
+    }
+    
+    .status-badge {
+        border: 1px solid currentColor;
+    }
+    
+    .mpesa-modal-content {
+        border: 3px solid #000;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .setup-step,
+    .summary-card {
+        transition: none;
+    }
+    
+    .button.loading::after {
+        animation: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .postbox {
+        background: #1e1e1e;
+        border-color: #3c3c3c;
+        color: #e0e0e0;
+    }
+    
+    .postbox .hndle {
+        background: #2d2d2d;
+        border-color: #3c3c3c;
+        color: #e0e0e0;
+    }
+    
+    .setup-step {
+        background: #1e1e1e;
+        border-color: #3c3c3c;
+        color: #e0e0e0;
+    }
+    
+    .summary-card {
+        background: #1e1e1e;
+        border-color: #3c3c3c;
+        color: #e0e0e0;
+    }
+}
